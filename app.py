@@ -1,6 +1,12 @@
 # app.py — Streamlit App para Predicción de Demanda Universitaria
 # -*- coding: utf-8 -*-
 
+import numpy as np
+
+# 🔑 FUNCIÓN NECESARIA PARA DESERIALIZAR EL PIPELINE
+def to_float32(x):
+    return x.astype(np.float32)
+
 import streamlit as st
 import pandas as pd
 import joblib
@@ -78,7 +84,7 @@ input_data["POSTULANTE__codigo_siu_programa_primera_opcion"] = st.text_input(
 df_input = pd.DataFrame([input_data])
 
 # ============================
-# AGREGAR FEATURES FALTANTES
+# AJUSTAR COLUMNAS DEL PIPELINE
 # ============================
 
 expected_cols = pipeline.named_steps["preprocess"].feature_names_in_
@@ -96,7 +102,9 @@ df_input = df_input[expected_cols]
 if st.button("📊 Predecir demanda"):
     try:
         pred = pipeline.predict(df_input)[0]
-        st.success(f"👉 Demanda estimada de matrícula: {int(round(pred))} estudiantes")
+        st.success(
+            f"👉 Demanda estimada de matrícula: **{int(round(pred))} estudiantes**"
+        )
     except Exception as e:
-        st.error("Error al generar predicción")
+        st.error("❌ Error al generar la predicción")
         st.exception(e)
