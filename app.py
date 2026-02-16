@@ -1,133 +1,81 @@
-# app.py — Streamlit App Final Tesis
-# -*- coding: utf-8 -*-
-
-import warnings
-warnings.filterwarnings("ignore")
-
-import numpy as np
 import streamlit as st
 import pandas as pd
 import joblib
+import matplotlib.pyplot as plt
 
-# 🔑 FUNCIÓN NECESARIA PARA DESERIALIZAR EL PIPELINE
-def to_float32(x):
-    return x.astype(np.float32)
+st.set_page_config(layout="wide")
 
-# ============================
-# CONFIG
-# ============================
+# =====================
+# CARGAR PIPELINE REAL
+# =====================
+pipeline = joblib.load("pipeline_stacking.joblib")
 
-PIPELINE_PATH = "pipeline_stacking.joblib"
+st.title("Predicción de Demanda Universitaria")
+st.markdown("Sistema de apoyo a la planificación universitaria basado en Machine Learning")
 
-st.set_page_config(
-    page_title="Predicción Demanda Universitaria",
-    layout="centered"
-)
+st.divider()
 
-st.title("🎓 Predicción de Demanda Universitaria")
-st.markdown("""
-Metamodelo de **Stacking Ensemble**
-(Random Forest + XGBoost + LightGBM + ElasticNet)
+# =====================
+# FORMULARIO PROFESIONAL
+# =====================
+st.subheader("Simulación de demanda")
 
-Modelo entrenado con datos nacionales reales.
-""")
+col1, col2, col3 = st.columns(3)
 
-# ============================
-# LOAD MODEL
-# ============================
+with col1:
+    edad = st.slider("Edad postulante", 16, 60, 18)
+    sexo = st.selectbox("Sexo", ["MASCULINO","FEMENINO"])
+    gestion = st.selectbox("Tipo gestión universidad", ["PÚBLICO","PRIVADO"])
 
-@st.cache_resource
-def load_model():
-    return joblib.load(PIPELINE_PATH)
+with col2:
+    nivel = st.selectbox("Nivel académico", ["CARRERA PROFESIONAL","MAESTRÍA","DOCTORADO"])
+    modalidad = st.selectbox("Modalidad ingreso", ["ORDINARIO","TRASLADO","SEGUNDA PROFESIÓN"])
+    departamento = st.text_input("Departamento nacimiento", "LIMA")
 
-pipeline = load_model()
+with col3:
+    anio = st.number_input("Año", 2018, 2030, 2024)
+    proceso = st.text_input("Proceso admisión", "REGULAR")
+    programa = st.text_input("Código programa SIU", "001")
 
-# ============================
-# FORMULARIO
-# ============================
+# =====================
+# DATAFRAME PARA MODELO
+# =====================
+input_dict = {
+    "POSTULANTE__edad": edad,
+    "POSTULANTE__sexo": sexo,
+    "POSTULANTE__tipo_gestion": gestion,
+    "POSTULANTE__nivel_academico": nivel,
+    "POSTULANTE__modalidad_ingreso": modalidad,
+    "POSTULANTE__departamento_nacimiento": departamento,
+    "POSTULANTE__anio": anio,
+    "POSTULANTE__proceso_admision": proceso,
+    "POSTULANTE__codigo_siu_programa_primera_opcion": programa
+}
 
-st.subheader("📊 Ingrese datos del postulante")
+df = pd.DataFrame([input_dict])
 
-input_data = {}
+# =====================
+# PREDICCION
+# =====================
+if st.button("Predecir demanda"):
 
-input_data["POSTULANTE__edad"] = st.slider(
-    "Edad del postulante",
-    16, 60, 18
-)
+    pred = pipeline.predict(df)[0]
+    pred = int(round(pred))
 
-input_data["POSTULANTE__sexo"] = st.selectbox(
-    "Sexo",
-    ["MASCULINO", "FEMENINO"]
-)
+    st.success(f"Demanda estimada: {pred} estudiantes")
 
-input_data["POSTULANTE__tipo_gestion"] = st.selectbox(
-    "Tipo de gestión",
-    ["PÚBLICO", "PRIVADO"]
-)
+    # gráfico
+    fig, ax = plt.subplots()
+    ax.bar(["Demanda estimada"], [pred])
+    ax.set_ylabel("Número de estudiantes")
+    st.pyplot(fig)
 
-input_data["POSTULANTE__nivel_academico"] = st.selectbox(
-    "Nivel académico",
-    ["CARRERA PROFESIONAL", "SEGUNDA ESPECIALIDAD", "MAESTRÍA", "DOCTORADO"]
-)
+    # interpretación académica
+    st.subheader("Interpretación")
 
-input_data["POSTULANTE__modalidad_ingreso"] = st.selectbox(
-    "Modalidad de ingreso",
-    ["ORDINARIO", "EXTRAORDINARIO", "TRASLADO", "SEGUNDA PROFESIÓN"]
-)
-
-input_data["POSTULANTE__departamento_nacimiento"] = st.text_input(
-    "Departamento de nacimiento",
-    value="LIMA"
-)
-
-input_data["POSTULANTE__codigo_siu_programa_primera_opcion"] = st.text_input(
-    "Código SIU del programa",
-    value="001234"
-)
-
-# ============================
-# DATAFRAME
-# ============================
-
-df_input = pd.DataFrame([input_data])
-
-# Ajustar columnas exactamente igual al entrenamiento
-expected_cols = pipeline.named_steps["preprocess"].feature_names_in_
-
-for col in expected_cols:
-    if col not in df_input.columns:
-        df_input[col] = None
-
-df_input = df_input[expected_cols]
-
-# ============================
-# PREDICCIÓN
-# ============================
-
-if st.button("🔮 Predecir demanda"):
-
-    try:
-        pred = pipeline.predict(df_input)[0]
-        pred = int(round(pred))
-
-        st.success(
-            f"📈 Demanda estimada para este perfil: **{pred} estudiantes**"
-        )
-
-        # Indicador visual adicional (para tesis)
-        st.metric(
-            label="Demanda proyectada",
-            value=pred
-        )
-
-        # Gráfico simple
-        chart_data = pd.DataFrame({
-            "Tipo": ["Demanda estimada"],
-            "Estudiantes": [pred]
-        })
-
-        st.bar_chart(chart_data.set_index("Tipo"))
-
-    except Exception as e:
-        st.error("❌ Error al generar predicción")
-        st.exception(e)
+    if pred > 800:
+        st.info("Alta demanda proyectada. Se recomienda ampliar vacantes.")
+    elif pred > 400:
+        st.warning("Demanda media. Evaluar capacidad instalada.")
+    else:
+        st.error("Demanda baja. Evaluar sostenibilidad del programa.")
