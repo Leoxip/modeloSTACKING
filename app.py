@@ -631,7 +631,7 @@ with tab3:
 
         <hr style="border-color:#1e3a5f; margin:20px 0;">
         <p style="font-size:0.75rem; color:#475569;">
-        Generado por el Metamodelo Stacking — Tesis UPEU 2025 ·
+        Generado por el Metamodelo Stacking.
         Datos: SUNEDU · MINEDU · TUNI.pe
         </p>
         </div>
