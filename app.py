@@ -550,7 +550,8 @@ with tab1:
                     a1.text(resultado + maximo_ref*0.02, 0, f'{resultado} est.\n({porcentaje_max}%)',
                             va='center', color=color_nivel, fontweight='bold', fontsize=9)
                     a1.text(maximo_ref*0.98, 0, f'Máx: {maximo_ref}', va='center', ha='right', color=C_GRIS3, fontsize=7.5)
-                    a1.text(0.02, 1.06, f'{porcentaje_max}% de capacidad máxima',
+                    # Subtítulo debajo del eje X (sin solapar el título)
+                    a1.text(0.02, -0.28, f'{porcentaje_max}% de capacidad máxima',
                             transform=a1.transAxes, color=color_nivel, fontsize=8, fontweight='600')
                     f1.tight_layout()
                     st.pyplot(f1)
