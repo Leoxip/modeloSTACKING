@@ -214,7 +214,7 @@ section[data-testid="stSidebar"] span {
     font-weight: 600;
 }
 
-/* Botón */
+/* Botón predecir (sidebar) */
 .stButton > button {
     background: linear-gradient(135deg, #1D4ED8, #7C3AED) !important;
     color: white !important;
@@ -232,6 +232,27 @@ section[data-testid="stSidebar"] span {
 .stButton > button:hover {
     transform: translateY(-2px) !important;
     box-shadow: 0 8px 32px rgba(37,99,235,0.45) !important;
+}
+
+/* Botón descarga PNG */
+.stDownloadButton > button {
+    background: #FFFFFF !important;
+    color: #2563EB !important;
+    border: 1.5px solid #BFDBFE !important;
+    border-radius: 8px !important;
+    padding: 7px 12px !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    width: 100% !important;
+    transition: all 0.2s ease !important;
+    letter-spacing: 0.5px !important;
+    margin-top: 4px !important;
+}
+.stDownloadButton > button:hover {
+    background: #EFF6FF !important;
+    border-color: #2563EB !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(37,99,235,0.15) !important;
 }
 
 /* Inputs */
@@ -497,157 +518,199 @@ with tab1:
 
                 st.markdown("<br>", unsafe_allow_html=True)
 
-                # ---- GRÁFICOS ----
+                # ---- GRÁFICOS INDIVIDUALES CON DESCARGA ----
                 st.markdown('<div class="section-header">📊 Análisis Visual del Resultado</div>', unsafe_allow_html=True)
 
-                fig = plt.figure(figsize=(17, 11), facecolor=FONDO_FIG)
-                fig.patch.set_linewidth(0)
-                gs = GridSpec(2, 3, figure=fig, hspace=0.55, wspace=0.38)
+                import io
 
-                # ── GRÁFICO 1: Gauge barra de demanda con % ──
-                ax1 = fig.add_subplot(gs[0, 0])
-                ax1.set_facecolor(FONDO_AX)
-                for spine in ax1.spines.values():
-                    spine.set_color(C_GRIS2)
+                def fig_to_png_bytes(figura):
+                    buf = io.BytesIO()
+                    figura.savefig(buf, format='png', dpi=180, bbox_inches='tight',
+                                   facecolor=figura.get_facecolor())
+                    buf.seek(0)
+                    return buf.read()
 
-                # Fondo completo
-                ax1.barh([""], [maximo_ref], color=C_GRIS2, height=0.55, edgecolor='none')
-                # Barra resultado
-                ax1.barh([""], [resultado], color=color_nivel, height=0.55, edgecolor='none', alpha=0.9)
-                ax1.set_xlim(0, maximo_ref * 1.12)
-                ax1.set_title("Demanda vs máximo histórico", color=C_TEXTO, fontsize=10.5, fontweight='600', pad=12, loc='left')
-                ax1.set_xlabel("Estudiantes", color=C_SUBTXT, fontsize=8.5)
-                ax1.tick_params(colors=C_SUBTXT, labelsize=8)
-                ax1.grid(axis='x', color=C_GRIS2, linewidth=0.6, alpha=0.8)
-                ax1.set_axisbelow(True)
-                # Etiqueta valor + porcentaje
-                ax1.text(resultado + 1.5, 0, f'{resultado} est.\n({porcentaje_max}%)',
-                         va='center', color=color_nivel, fontweight='bold', fontsize=9.5)
-                ax1.text(maximo_ref * 0.98, 0, f'Máx: {maximo_ref}',
-                         va='center', ha='right', color=C_GRIS3, fontsize=7.5)
-                # Mini leyenda
-                from matplotlib.patches import FancyBboxPatch
-                ax1.text(0.02, 1.08, f'{porcentaje_max}% de capacidad máxima',
-                         transform=ax1.transAxes, color=color_nivel, fontsize=8, fontweight='600')
+                def boton_descarga(figura, nombre_archivo, label="⬇ Descargar PNG"):
+                    png_bytes = fig_to_png_bytes(figura)
+                    st.download_button(
+                        label=label,
+                        data=png_bytes,
+                        file_name=nombre_archivo,
+                        mime="image/png",
+                        use_container_width=True,
+                        key=nombre_archivo
+                    )
 
-                # ── GRÁFICO 2: Comparación por periodo con % ──
-                ax2 = fig.add_subplot(gs[0, 1])
-                periodos_list = ["I", "II", "ANUAL"]
-                variacion = [resultado * 0.85, resultado * 1.0, resultado * 1.15] if periodo == "ANUAL" else \
-                            [resultado * 1.0, resultado * 0.9, resultado * 1.05]
-                variacion = [int(v) for v in variacion]
-                colores_p = [color_nivel if p == periodo else C_GRIS2 for p in periodos_list]
-                bars2 = ax2.bar(periodos_list, variacion, color=colores_p, edgecolor='white', width=0.5, linewidth=1.2)
-                estilo_ax(ax2, "Proyección por periodo", ylabel="Estudiantes")
-                for bar, val in zip(bars2, variacion):
-                    pct = round((val / maximo_ref) * 100, 1)
-                    ax2.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.4,
-                             f'{val}\n({pct}%)', ha='center', va='bottom',
-                             color=C_TEXTO, fontsize=7.5, fontweight='600', linespacing=1.4)
+                # ─── FILA 1: 3 gráficos ───
+                col_g1, col_g2, col_g3 = st.columns(3)
 
-                # ── GRÁFICO 3: Tendencia anual con % crecimiento ──
-                ax3 = fig.add_subplot(gs[0, 2])
-                ax3.set_facecolor(FONDO_AX)
-                for spine in ax3.spines.values():
-                    spine.set_color(C_GRIS2)
-                anios_hist = list(range(anio - 4, anio + 3))
-                factores = [0.6, 0.7, 0.8, 0.9, 1.0, 1.08, 1.15]
-                valores_hist = [int(resultado * f) for f in factores]
-                ax3.fill_between(anios_hist[:5], valores_hist[:5], alpha=0.12, color=C_AZUL)
-                ax3.fill_between(anios_hist[4:], valores_hist[4:], alpha=0.08, color=C_VIOLETA)
-                ax3.plot(anios_hist[:5], valores_hist[:5], 'o-', color=C_AZUL, linewidth=2.2,
-                         markersize=6, label='Histórico', zorder=3)
-                ax3.plot(anios_hist[4:], valores_hist[4:], 'o--', color=C_VIOLETA, linewidth=2.2,
-                         markersize=6, label='Proyectado', zorder=3)
-                ax3.axvline(x=anio, color=color_nivel, linestyle=':', alpha=0.7, linewidth=1.5)
-                # Anotar % crecimiento año actual
-                crecimiento_pct = round(((valores_hist[5] - valores_hist[4]) / valores_hist[4]) * 100, 1)
-                ax3.annotate(f'+{crecimiento_pct}%',
-                             xy=(anios_hist[5], valores_hist[5]),
-                             xytext=(anios_hist[5] + 0.3, valores_hist[5] + 2),
-                             color=C_VIOLETA, fontsize=8, fontweight='700')
-                ax3.set_title("Tendencia temporal", color=C_TEXTO, fontsize=10.5, fontweight='600', pad=12, loc='left')
-                ax3.set_ylabel("Estudiantes", color=C_SUBTXT, fontsize=8.5)
-                ax3.tick_params(colors=C_SUBTXT, labelsize=7.5, rotation=25)
-                ax3.grid(color=C_GRIS2, linewidth=0.6, alpha=0.8)
-                ax3.set_axisbelow(True)
-                ax3.legend(fontsize=7.5, facecolor=FONDO_FIG, labelcolor=C_SUBTXT,
-                           edgecolor=C_GRIS2, framealpha=1)
-
-                # ── GRÁFICO 4: Por tipo de gestión con % ──
-                ax4 = fig.add_subplot(gs[1, 0])
-                gestiones = ["Público", "Privado"]
-                vals_gestion = [int(resultado * 1.2), int(resultado * 0.9)] \
-                               if nombre_entidad == "Público" else \
-                               [int(resultado * 0.8), int(resultado * 1.0)]
-                colores_g = [C_AZUL if g == nombre_entidad else C_GRIS2 for g in gestiones]
-                bars4 = ax4.bar(gestiones, vals_gestion, color=colores_g, edgecolor='white', width=0.45, linewidth=1.2)
-                estilo_ax(ax4, "Por tipo de gestión", ylabel="Estudiantes")
-                total_g = sum(vals_gestion)
-                for bar, val in zip(bars4, vals_gestion):
-                    pct = round((val / total_g) * 100, 1)
-                    ax4.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.3,
-                             f'{val}\n({pct}%)', ha='center', va='bottom',
-                             color=C_TEXTO, fontsize=8, fontweight='600', linespacing=1.4)
-
-                # ── GRÁFICO 5: Distribución por nivel académico (donut) ──
-                ax5 = fig.add_subplot(gs[1, 1])
-                ax5.set_facecolor(FONDO_AX)
-                niveles_pie = ["Carrera Prof.", "Maestría", "Doctorado", "2da Esp."]
-                proporciones = [0.72, 0.15, 0.08, 0.05]
-                colores_pie = [C_AZUL, C_VIOLETA, C_VERDE, C_AMBAR]
-                wedges, texts, autotexts = ax5.pie(
-                    proporciones,
-                    labels=niveles_pie,
-                    colors=colores_pie,
-                    autopct='%1.1f%%',
-                    startangle=90,
-                    pctdistance=0.78,
-                    textprops={'color': C_SUBTXT, 'fontsize': 7.5},
-                    wedgeprops={'edgecolor': FONDO_FIG, 'linewidth': 2.5, 'width': 0.62}
-                )
-                for at in autotexts:
-                    at.set_fontsize(7.5)
-                    at.set_color('#FFFFFF')
-                    at.set_fontweight('bold')
-                # Centro del donut
-                ax5.text(0, 0, f'{resultado}\nest.', ha='center', va='center',
-                         color=C_TEXTO, fontsize=9, fontweight='700', linespacing=1.5)
-                ax5.set_title("Distribución por nivel académico", color=C_TEXTO,
-                              fontsize=10.5, fontweight='600', pad=12, loc='left')
-
-                # ── GRÁFICO 6: Predicción por modelo base con % sobre stacking ──
-                ax6 = fig.add_subplot(gs[1, 2])
-                modelos = ["RF", "XGB", "LGBM", "SVR", "Stacking"]
-                preds_modelos = [
-                    int(resultado * 0.91),
-                    int(resultado * 0.94),
-                    int(resultado * 0.97),
-                    int(resultado * 0.88),
-                    resultado
-                ]
-                colores_mod = [C_GRIS2, C_GRIS2, C_GRIS2, C_GRIS2, color_nivel]
-                bars6 = ax6.bar(modelos, preds_modelos, color=colores_mod, edgecolor='white', width=0.5, linewidth=1.2)
-                estilo_ax(ax6, "Predicción por modelo base", ylabel="Estudiantes")
-                for bar, val in zip(bars6, preds_modelos):
-                    diff_pct = round(((val - resultado) / resultado) * 100, 1)
-                    label = f'{val}\n({diff_pct:+.1f}%)' if val != resultado else f'{val}\n(ref)'
-                    ax6.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.3,
-                             label, ha='center', va='bottom',
-                             color=C_TEXTO, fontsize=7, fontweight='600', linespacing=1.4)
-                # Línea referencia stacking
-                ax6.axhline(y=resultado, color=color_nivel, linestyle='--',
-                            linewidth=1.2, alpha=0.5, zorder=0)
-
-                # Borde exterior figura
-                for ax in [ax1, ax2, ax3, ax4, ax5, ax6]:
-                    for spine in ax.spines.values():
-                        spine.set_visible(True)
+                # ── GRÁFICO 1: Gauge barra de demanda ──
+                with col_g1:
+                    fig1, ax1 = plt.subplots(figsize=(6, 3.8), facecolor=FONDO_FIG)
+                    ax1.set_facecolor(FONDO_AX)
+                    for spine in ax1.spines.values():
                         spine.set_color(C_GRIS2)
-                        spine.set_linewidth(0.8)
+                    ax1.barh([""], [maximo_ref], color=C_GRIS2, height=0.55, edgecolor='none')
+                    ax1.barh([""], [resultado], color=color_nivel, height=0.55, edgecolor='none', alpha=0.9)
+                    ax1.set_xlim(0, maximo_ref * 1.28)
+                    ax1.set_title("Demanda vs máximo histórico", color=C_TEXTO, fontsize=10, fontweight='600', pad=10, loc='left')
+                    ax1.set_xlabel("Estudiantes", color=C_SUBTXT, fontsize=8)
+                    ax1.tick_params(colors=C_SUBTXT, labelsize=8)
+                    ax1.grid(axis='x', color=C_GRIS2, linewidth=0.6, alpha=0.8)
+                    ax1.set_axisbelow(True)
+                    ax1.text(resultado + maximo_ref * 0.02, 0,
+                             f'{resultado} est.\n({porcentaje_max}%)',
+                             va='center', color=color_nivel, fontweight='bold', fontsize=9)
+                    ax1.text(maximo_ref * 0.98, 0, f'Máx: {maximo_ref}',
+                             va='center', ha='right', color=C_GRIS3, fontsize=7.5)
+                    ax1.text(0.02, 1.06, f'{porcentaje_max}% de capacidad máxima',
+                             transform=ax1.transAxes, color=color_nivel, fontsize=8, fontweight='600')
+                    fig1.tight_layout()
+                    st.pyplot(fig1)
+                    boton_descarga(fig1, f'demanda_gauge_{anio}.png', '⬇ Descargar gráfico 1')
+                    plt.close(fig1)
 
-                st.pyplot(fig)
-                plt.close()
+                # ── GRÁFICO 2: Proyección por periodo ──
+                with col_g2:
+                    fig2, ax2 = plt.subplots(figsize=(6, 3.8), facecolor=FONDO_FIG)
+                    periodos_list = ["I", "II", "ANUAL"]
+                    variacion = [resultado * 0.85, resultado * 1.0, resultado * 1.15] if periodo == "ANUAL" else \
+                                [resultado * 1.0, resultado * 0.9, resultado * 1.05]
+                    variacion = [int(v) for v in variacion]
+                    colores_p = [color_nivel if p == periodo else C_GRIS2 for p in periodos_list]
+                    bars2 = ax2.bar(periodos_list, variacion, color=colores_p, edgecolor='white', width=0.5, linewidth=1.2)
+                    estilo_ax(ax2, "Proyección por periodo", ylabel="Estudiantes")
+                    max_var = max(variacion) if variacion else 1
+                    ax2.set_ylim(0, max_var * 1.38)
+                    for bar, val in zip(bars2, variacion):
+                        pct = round((val / maximo_ref) * 100, 1)
+                        ax2.text(bar.get_x() + bar.get_width()/2, bar.get_height() + max_var * 0.02,
+                                 f'{val}\n({pct}%)', ha='center', va='bottom',
+                                 color=C_TEXTO, fontsize=7.5, fontweight='600', linespacing=1.4)
+                    fig2.tight_layout()
+                    st.pyplot(fig2)
+                    boton_descarga(fig2, f'proyeccion_periodo_{anio}.png', '⬇ Descargar gráfico 2')
+                    plt.close(fig2)
+
+                # ── GRÁFICO 3: Tendencia temporal ──
+                with col_g3:
+                    fig3, ax3 = plt.subplots(figsize=(6, 3.8), facecolor=FONDO_FIG)
+                    ax3.set_facecolor(FONDO_AX)
+                    for spine in ax3.spines.values():
+                        spine.set_color(C_GRIS2)
+                    anios_hist = list(range(anio - 4, anio + 3))
+                    factores = [0.6, 0.7, 0.8, 0.9, 1.0, 1.08, 1.15]
+                    valores_hist = [int(resultado * f) for f in factores]
+                    ax3.fill_between(anios_hist[:5], valores_hist[:5], alpha=0.12, color=C_AZUL)
+                    ax3.fill_between(anios_hist[4:], valores_hist[4:], alpha=0.08, color=C_VIOLETA)
+                    ax3.plot(anios_hist[:5], valores_hist[:5], 'o-', color=C_AZUL, linewidth=2.2,
+                             markersize=6, label='Histórico', zorder=3)
+                    ax3.plot(anios_hist[4:], valores_hist[4:], 'o--', color=C_VIOLETA, linewidth=2.2,
+                             markersize=6, label='Proyectado', zorder=3)
+                    ax3.axvline(x=anio, color=color_nivel, linestyle=':', alpha=0.7, linewidth=1.5)
+                    crecimiento_pct = round(((valores_hist[5] - valores_hist[4]) / valores_hist[4]) * 100, 1)
+                    ax3.annotate(f'+{crecimiento_pct}%',
+                                 xy=(anios_hist[5], valores_hist[5]),
+                                 xytext=(anios_hist[5] + 0.2, valores_hist[5] + max(valores_hist) * 0.05),
+                                 color=C_VIOLETA, fontsize=8, fontweight='700')
+                    ax3.set_title("Tendencia temporal", color=C_TEXTO, fontsize=10, fontweight='600', pad=10, loc='left')
+                    ax3.set_ylabel("Estudiantes", color=C_SUBTXT, fontsize=8)
+                    ax3.tick_params(colors=C_SUBTXT, labelsize=7.5, rotation=25)
+                    ax3.grid(color=C_GRIS2, linewidth=0.6, alpha=0.8)
+                    ax3.set_axisbelow(True)
+                    ax3.legend(fontsize=7.5, facecolor=FONDO_FIG, labelcolor=C_SUBTXT,
+                               edgecolor=C_GRIS2, framealpha=1)
+                    fig3.tight_layout()
+                    st.pyplot(fig3)
+                    boton_descarga(fig3, f'tendencia_temporal_{anio}.png', '⬇ Descargar gráfico 3')
+                    plt.close(fig3)
+
+                st.markdown("<br>", unsafe_allow_html=True)
+
+                # ─── FILA 2: 3 gráficos ───
+                col_g4, col_g5, col_g6 = st.columns(3)
+
+                # ── GRÁFICO 4: Por tipo de gestión ──
+                with col_g4:
+                    fig4, ax4 = plt.subplots(figsize=(6, 3.8), facecolor=FONDO_FIG)
+                    gestiones = ["Público", "Privado"]
+                    vals_gestion = [int(resultado * 1.2), int(resultado * 0.9)] \
+                                   if nombre_entidad == "Público" else \
+                                   [int(resultado * 0.8), int(resultado * 1.0)]
+                    colores_g = [C_AZUL if g == nombre_entidad else C_GRIS2 for g in gestiones]
+                    bars4 = ax4.bar(gestiones, vals_gestion, color=colores_g, edgecolor='white', width=0.45, linewidth=1.2)
+                    estilo_ax(ax4, "Por tipo de gestión", ylabel="Estudiantes")
+                    max_g = max(vals_gestion) if vals_gestion else 1
+                    ax4.set_ylim(0, max_g * 1.38)
+                    total_g = sum(vals_gestion)
+                    for bar, val in zip(bars4, vals_gestion):
+                        pct = round((val / total_g) * 100, 1)
+                        ax4.text(bar.get_x() + bar.get_width()/2, bar.get_height() + max_g * 0.02,
+                                 f'{val}\n({pct}%)', ha='center', va='bottom',
+                                 color=C_TEXTO, fontsize=8, fontweight='600', linespacing=1.4)
+                    fig4.tight_layout()
+                    st.pyplot(fig4)
+                    boton_descarga(fig4, f'gestion_{anio}.png', '⬇ Descargar gráfico 4')
+                    plt.close(fig4)
+
+                # ── GRÁFICO 5: Donut nivel académico ──
+                with col_g5:
+                    fig5, ax5 = plt.subplots(figsize=(6, 3.8), facecolor=FONDO_FIG)
+                    ax5.set_facecolor(FONDO_AX)
+                    niveles_pie = ["Carrera Prof.", "Maestría", "Doctorado", "2da Esp."]
+                    proporciones = [0.72, 0.15, 0.08, 0.05]
+                    colores_pie = [C_AZUL, C_VIOLETA, C_VERDE, C_AMBAR]
+                    wedges, texts, autotexts = ax5.pie(
+                        proporciones,
+                        labels=niveles_pie,
+                        colors=colores_pie,
+                        autopct='%1.1f%%',
+                        startangle=90,
+                        pctdistance=0.78,
+                        textprops={'color': C_SUBTXT, 'fontsize': 7.5},
+                        wedgeprops={'edgecolor': FONDO_FIG, 'linewidth': 2.5, 'width': 0.62}
+                    )
+                    for at in autotexts:
+                        at.set_fontsize(7.5)
+                        at.set_color('#FFFFFF')
+                        at.set_fontweight('bold')
+                    ax5.text(0, 0, f'{resultado}\nest.', ha='center', va='center',
+                             color=C_TEXTO, fontsize=9, fontweight='700', linespacing=1.5)
+                    ax5.set_title("Distribución por nivel académico", color=C_TEXTO,
+                                  fontsize=10, fontweight='600', pad=10, loc='left')
+                    fig5.tight_layout()
+                    st.pyplot(fig5)
+                    boton_descarga(fig5, f'nivel_academico_{anio}.png', '⬇ Descargar gráfico 5')
+                    plt.close(fig5)
+
+                # ── GRÁFICO 6: Predicción por modelo base ──
+                with col_g6:
+                    fig6, ax6 = plt.subplots(figsize=(6, 3.8), facecolor=FONDO_FIG)
+                    modelos = ["RF", "XGB", "LGBM", "SVR", "Stacking"]
+                    preds_modelos = [
+                        int(resultado * 0.91),
+                        int(resultado * 0.94),
+                        int(resultado * 0.97),
+                        int(resultado * 0.88),
+                        resultado
+                    ]
+                    colores_mod = [C_GRIS2, C_GRIS2, C_GRIS2, C_GRIS2, color_nivel]
+                    bars6 = ax6.bar(modelos, preds_modelos, color=colores_mod, edgecolor='white', width=0.5, linewidth=1.2)
+                    estilo_ax(ax6, "Predicción por modelo base", ylabel="Estudiantes")
+                    max_m = max(preds_modelos) if preds_modelos else 1
+                    ax6.set_ylim(0, max_m * 1.40)
+                    for bar, val in zip(bars6, preds_modelos):
+                        diff_pct = round(((val - resultado) / resultado) * 100, 1)
+                        label = f'{val}\n({diff_pct:+.1f}%)' if val != resultado else f'{val}\n(ref)'
+                        ax6.text(bar.get_x() + bar.get_width()/2, bar.get_height() + max_m * 0.02,
+                                 label, ha='center', va='bottom',
+                                 color=C_TEXTO, fontsize=7, fontweight='600', linespacing=1.4)
+                    ax6.axhline(y=resultado, color=color_nivel, linestyle='--',
+                                linewidth=1.2, alpha=0.5, zorder=0)
+                    fig6.tight_layout()
+                    st.pyplot(fig6)
+                    boton_descarga(fig6, f'modelos_base_{anio}.png', '⬇ Descargar gráfico 6')
+                    plt.close(fig6)
 
                 # Guardar en session para el informe
                 st.session_state['resultado'] = resultado
@@ -781,6 +844,20 @@ with tab3:
         color_badge = '#065F46' if n=='ALTA' else '#92400E' if n=='MEDIA' else '#1E40AF'
         bg_badge    = '#ECFDF5' if n=='ALTA' else '#FFFBEB' if n=='MEDIA' else '#EFF6FF'
 
+        # Pre-calcular textos condicionales FUERA del f-string para evitar escape de HTML
+        if n == 'ALTA':
+            texto_nivel = 'superando el umbral de 50 estudiantes por grupo, lo que indica alta absorción.'
+            recos_html = ('<li>Fortalecer la oferta académica en esta área — existe demanda sostenida y creciente.</li>'
+                          '<li>Considerar apertura de nuevas secciones o modalidades (virtual/presencial).</li>')
+        elif n == 'MEDIA':
+            texto_nivel = 'en el rango intermedio de 20–50 estudiantes, indicando demanda moderada.'
+            recos_html = ('<li>Monitorear la evolución semestral de la demanda con datos actualizados.</li>'
+                          '<li>Evaluar estrategias de difusión para incrementar postulantes.</li>')
+        else:
+            texto_nivel = 'por debajo de 20 estudiantes, indicando baja absorción en este perfil.'
+            recos_html = ('<li>Revisar la pertinencia de la oferta frente al mercado laboral regional.</li>'
+                          '<li>Considerar fusión con programas afines o rediseño curricular.</li>')
+
         st.markdown(f"""
         <div style="background:#FFFFFF; border:1.5px solid #E4E8F0; border-radius:20px;
              padding:36px 40px; line-height:2; color:#374151;
@@ -837,9 +914,7 @@ with tab3:
 
             <p>Este valor corresponde a una demanda clasificada como
             <b style="color:{color_badge};">{n}</b>,
-            {'superando el umbral de 50 estudiantes por grupo, lo que indica alta absorción.' if n=='ALTA'
-             else 'en el rango intermedio de 20–50 estudiantes, indicando demanda moderada.' if n=='MEDIA'
-             else 'por debajo de 20 estudiantes, indicando baja absorción en este perfil.'}
+            {texto_nivel}
             </p>
         </div>
 
@@ -847,9 +922,7 @@ with tab3:
             <div style="font-size:0.68rem; color:#9CA3AF; text-transform:uppercase;
                 letter-spacing:2px; margin-bottom:12px;">Recomendaciones estratégicas</div>
             <ul style="padding-left:20px; line-height:2;">
-            {'<li>Fortalecer la oferta académica en esta área — existe demanda sostenida y creciente.</li><li>Considerar apertura de nuevas secciones o modalidades (virtual/presencial).</li>' if n=='ALTA'
-             else '<li>Monitorear la evolución semestral de la demanda con datos actualizados.</li><li>Evaluar estrategias de difusión para incrementar postulantes.</li>' if n=='MEDIA'
-             else '<li>Revisar la pertinencia de la oferta frente al mercado laboral regional.</li><li>Considerar fusión con programas afines o rediseño curricular.</li>'}
+            {recos_html}
             <li>Comparar con la tendencia histórica del departamento seleccionado.</li>
             <li>Validar con datos actualizados de SUNEDU/MINEDU cada semestre.</li>
             <li>Cruzar resultados con indicadores de empleabilidad y mercado laboral.</li>
