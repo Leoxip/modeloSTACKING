@@ -852,88 +852,77 @@ with tab3:
             recos_html = ('<li>Revisar la pertinencia de la oferta frente al mercado laboral regional.</li>'
                           '<li>Considerar fusión con programas afines o rediseño curricular.</li>')
 
-        st.markdown(f"""
-        <div style="background:#FFFFFF; border:1.5px solid #E4E8F0; border-radius:20px;
-             padding:36px 40px; line-height:2; color:#374151;
-             box-shadow: 0 4px 24px rgba(0,0,0,0.06);">
+        # Construir HTML como string Python puro (evita que Streamlit escape las etiquetas)
+        html_informe = (
+            '<div style="background:#FFFFFF;border:1.5px solid #E4E8F0;border-radius:20px;'
+            'padding:36px 40px;line-height:2;color:#374151;box-shadow:0 4px 24px rgba(0,0,0,0.06);">'
 
-        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:24px;">
-            <div>
-                <h3 style="color:#111827; font-family:'Playfair Display',serif;
-                    font-size:1.3rem; margin:0 0 4px 0;">
-                    Informe de Predicción — Metamodelo Stacking</h3>
-                <div style="font-size:0.72rem; color:#9CA3AF; text-transform:uppercase;
-                    letter-spacing:2px;">Sistema de Inteligencia Artificial · SUNEDU · MINEDU</div>
-            </div>
-            <div style="background:{bg_badge}; color:{color_badge}; border:1.5px solid {cn};
-                padding:8px 22px; border-radius:999px; font-size:0.85rem; font-weight:700;
-                letter-spacing:1.5px; white-space:nowrap;">
-                DEMANDA {n}
-            </div>
-        </div>
+            # Encabezado
+            '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;">'
+            '<div>'
+            '<h3 style="color:#111827;font-family:serif;font-size:1.3rem;margin:0 0 4px 0;">'
+            'Informe de Predicción — Metamodelo Stacking</h3>'
+            '<div style="font-size:0.72rem;color:#9CA3AF;text-transform:uppercase;letter-spacing:2px;">'
+            'Sistema de Inteligencia Artificial · SUNEDU · MINEDU</div>'
+            '</div>'
+            '<div style="background:' + bg_badge + ';color:' + color_badge + ';border:1.5px solid ' + cn + ';'
+            'padding:8px 22px;border-radius:999px;font-size:0.85rem;font-weight:700;'
+            'letter-spacing:1.5px;white-space:nowrap;">DEMANDA ' + n + '</div>'
+            '</div>'
 
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:24px;">
-            <div style="background:#F7F8FC; border-radius:12px; padding:16px 20px;">
-                <div style="font-size:0.68rem; color:#9CA3AF; text-transform:uppercase;
-                    letter-spacing:2px; margin-bottom:8px;">Parámetros de entrada</div>
-                <div><b style="color:#111827;">Periodo:</b> {p['anio']} — {p['periodo']}</div>
-                <div><b style="color:#111827;">Área:</b> {p['area']}</div>
-                <div><b style="color:#111827;">Nivel:</b> {p['nivel']}</div>
-                <div><b style="color:#111827;">Departamento:</b> {p['departamento']}</div>
-                <div><b style="color:#111827;">Gestión:</b> {p['gestion']}</div>
-                <div><b style="color:#111827;">Perfil:</b> {p['sexo']}, {p['edad']} años</div>
-            </div>
-            <div style="background:#F0F5FF; border-radius:12px; padding:16px 20px;
-                border-left:4px solid {C_AZUL};">
-                <div style="font-size:0.68rem; color:#9CA3AF; text-transform:uppercase;
-                    letter-spacing:2px; margin-bottom:8px;">Resultado del modelo</div>
-                <div style="font-family:'Playfair Display',serif; font-size:3rem;
-                    color:{C_AZUL}; line-height:1; font-weight:700;">{r}</div>
-                <div style="font-size:0.78rem; color:#6B7280; margin-top:4px;">
-                    estudiantes estimados</div>
-                <div style="margin-top:10px; font-size:0.88rem;">
-                    <b style="color:{cn};">{pct}%</b> de la demanda máxima histórica ({92} est.)
-                </div>
-            </div>
-        </div>
+            # Grid parámetros + resultado
+            '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;">'
+            '<div style="background:#F7F8FC;border-radius:12px;padding:16px 20px;">'
+            '<div style="font-size:0.68rem;color:#9CA3AF;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;">Parámetros de entrada</div>'
+            '<div><b style="color:#111827;">Periodo:</b> ' + str(p['anio']) + ' — ' + str(p['periodo']) + '</div>'
+            '<div><b style="color:#111827;">Área:</b> ' + str(p['area']) + '</div>'
+            '<div><b style="color:#111827;">Nivel:</b> ' + str(p['nivel']) + '</div>'
+            '<div><b style="color:#111827;">Departamento:</b> ' + str(p['departamento']) + '</div>'
+            '<div><b style="color:#111827;">Gestión:</b> ' + str(p['gestion']) + '</div>'
+            '<div><b style="color:#111827;">Perfil:</b> ' + str(p['sexo']) + ', ' + str(p['edad']) + ' años</div>'
+            '</div>'
+            '<div style="background:#F0F5FF;border-radius:12px;padding:16px 20px;border-left:4px solid ' + C_AZUL + ';">'
+            '<div style="font-size:0.68rem;color:#9CA3AF;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;">Resultado del modelo</div>'
+            '<div style="font-family:serif;font-size:3rem;color:' + C_AZUL + ';line-height:1;font-weight:700;">' + str(r) + '</div>'
+            '<div style="font-size:0.78rem;color:#6B7280;margin-top:4px;">estudiantes estimados</div>'
+            '<div style="margin-top:10px;font-size:0.88rem;">'
+            '<b style="color:' + cn + ';">' + str(pct) + '%</b> de la demanda máxima histórica (92 est.)'
+            '</div>'
+            '</div>'
+            '</div>'
 
-        <div style="border-top:1.5px solid #E4E8F0; padding-top:20px; margin-top:4px;">
-            <div style="font-size:0.68rem; color:#9CA3AF; text-transform:uppercase;
-                letter-spacing:2px; margin-bottom:12px;">Análisis del resultado</div>
-            <p>El metamodelo de ensamble stacking —conformado por los modelos base
-            <b style="color:#111827;">XGBoost, LightGBM, Random Forest y Support Vector Regression</b>,
-            con meta-regresor <b style="color:#111827;">ElasticNet</b>— proyecta una demanda de
-            <b style="color:{C_AZUL}; font-size:1.1rem;"> {r} estudiantes</b>
-            ({pct}% del máximo histórico registrado).</p>
+            # Análisis
+            '<div style="border-top:1.5px solid #E4E8F0;padding-top:20px;margin-top:4px;">'
+            '<div style="font-size:0.68rem;color:#9CA3AF;text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;">Análisis del resultado</div>'
+            '<p style="margin:0 0 12px 0;">El metamodelo de ensamble stacking —conformado por los modelos base '
+            '<b style="color:#111827;">XGBoost, LightGBM, Random Forest y Support Vector Regression</b>, '
+            'con meta-regresor <b style="color:#111827;">ElasticNet</b>— proyecta una demanda de '
+            '<b style="color:' + C_AZUL + ';font-size:1.1rem;"> ' + str(r) + ' estudiantes</b> '
+            '(' + str(pct) + '% del máximo histórico registrado).</p>'
+            '<p style="margin:0;">Este valor corresponde a una demanda clasificada como '
+            '<b style="color:' + color_badge + ';">' + n + '</b>, ' + texto_nivel + '</p>'
+            '</div>'
 
-            <p>Este valor corresponde a una demanda clasificada como
-            <b style="color:{color_badge};">{n}</b>,
-            {texto_nivel}
-            </p>
-        </div>
+            # Recomendaciones
+            '<div style="border-top:1.5px solid #E4E8F0;padding-top:20px;margin-top:4px;">'
+            '<div style="font-size:0.68rem;color:#9CA3AF;text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;">Recomendaciones estratégicas</div>'
+            '<ul style="padding-left:20px;line-height:2;margin:0;">'
+            + recos_html +
+            '<li>Comparar con la tendencia histórica del departamento seleccionado.</li>'
+            '<li>Validar con datos actualizados de SUNEDU/MINEDU cada semestre.</li>'
+            '<li>Cruzar resultados con indicadores de empleabilidad y mercado laboral.</li>'
+            '</ul>'
+            '</div>'
 
-        <div style="border-top:1.5px solid #E4E8F0; padding-top:20px; margin-top:4px;">
-            <div style="font-size:0.68rem; color:#9CA3AF; text-transform:uppercase;
-                letter-spacing:2px; margin-bottom:12px;">Recomendaciones estratégicas</div>
-            <ul style="padding-left:20px; line-height:2;">
-            {recos_html}
-            <li>Comparar con la tendencia histórica del departamento seleccionado.</li>
-            <li>Validar con datos actualizados de SUNEDU/MINEDU cada semestre.</li>
-            <li>Cruzar resultados con indicadores de empleabilidad y mercado laboral.</li>
-            </ul>
-        </div>
-
-        <div style="border-top:1.5px solid #E4E8F0; padding-top:14px; margin-top:8px;
-             display:flex; justify-content:space-between; align-items:center;">
-            <div style="font-size:0.72rem; color:#9CA3AF;">
-                Generado por Metamodelo Stacking · Datos: SUNEDU · MINEDU · TUNI.pe
-            </div>
-            <div style="font-size:0.72rem; color:#9CA3AF;">
-                MAE ≈ 3.2 · RMSE ≈ 5.1 · R² ≈ 0.87
-            </div>
-        </div>
-        </div>
-        """, unsafe_allow_html=True)
+            # Footer
+            '<div style="border-top:1.5px solid #E4E8F0;padding-top:14px;margin-top:8px;'
+            'display:flex;justify-content:space-between;align-items:center;">'
+            '<div style="font-size:0.72rem;color:#9CA3AF;">Generado por Metamodelo Stacking · Datos: SUNEDU · MINEDU · TUNI.pe</div>'
+            '<div style="font-size:0.72rem;color:#9CA3AF;">MAE ≈ 3.2 · RMSE ≈ 5.1 · R² ≈ 0.87</div>'
+            '</div>'
+            '</div>'
+        )
+        st.markdown(html_informe, unsafe_allow_html=True)
     else:
         st.markdown("""
         <div style="text-align:center; padding:50px 40px; background:#FFFFFF;
