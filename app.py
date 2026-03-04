@@ -23,23 +23,48 @@ st.set_page_config(
 # ============================================================
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+* { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 
 html, body, [class*="css"] {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-/* Fondo general blanco roto */
+/* ── Fondo general con mesh gradient suave estilo Apple ── */
 .stApp {
-    background: #F7F8FC;
-    color: #1a1d2e;
+    background: linear-gradient(135deg, #EEF2FF 0%, #F0F9FF 30%, #F5F3FF 60%, #ECFDF5 100%);
+    background-attachment: fixed;
+    color: #1C1C1E;
+    min-height: 100vh;
 }
 
-/* Sidebar */
+/* Pseudo-orbes decorativos en el fondo */
+.stApp::before {
+    content: '';
+    position: fixed;
+    top: -200px; left: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+}
+.stApp::after {
+    content: '';
+    position: fixed;
+    bottom: -150px; right: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(16,185,129,0.10) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+}
+
+/* ── Sidebar — glass panel ── */
 section[data-testid="stSidebar"] {
-    background: #FFFFFF;
-    border-right: 1px solid #E4E8F0;
-    box-shadow: 4px 0 20px rgba(0,0,0,0.04);
+    background: rgba(255,255,255,0.72) !important;
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+    border-right: 1px solid rgba(255,255,255,0.6) !important;
+    box-shadow: 4px 0 32px rgba(99,102,241,0.08) !important;
 }
 section[data-testid="stSidebar"] .stMarkdown,
 section[data-testid="stSidebar"] label,
@@ -47,251 +72,332 @@ section[data-testid="stSidebar"] p,
 section[data-testid="stSidebar"] span {
     color: #374151 !important;
 }
+section[data-testid="stSidebar"] strong {
+    color: #111827 !important;
+    font-weight: 700 !important;
+}
 
-/* Título principal */
+/* ── Título principal ── */
 .titulo-principal {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.5rem;
-    font-weight: 700;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 2.6rem;
+    font-weight: 800;
     color: #111827;
-    letter-spacing: -1px;
-    line-height: 1.15;
+    letter-spacing: -1.5px;
+    line-height: 1.1;
 }
 .titulo-acento {
-    color: #2563EB;
+    background: linear-gradient(135deg, #2563EB, #7C3AED);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 .subtitulo {
-    font-size: 0.82rem;
-    color: #6B7280;
-    font-weight: 400;
-    margin-top: 6px;
+    font-size: 0.75rem;
+    color: #9CA3AF;
+    font-weight: 500;
+    margin-top: 8px;
     letter-spacing: 2.5px;
     text-transform: uppercase;
 }
 
-/* Línea decorativa */
+/* ── Línea decorativa ── */
 .divider-line {
-    height: 3px;
-    background: linear-gradient(90deg, #2563EB 0%, #7C3AED 50%, #059669 100%);
+    height: 2px;
+    background: linear-gradient(90deg, rgba(37,99,235,0.8) 0%, rgba(124,58,237,0.6) 50%, rgba(5,150,105,0.4) 100%);
     border-radius: 2px;
-    margin: 16px 0 28px 0;
+    margin: 14px 0 26px 0;
 }
 
-/* Cards métricas */
+/* ── Cards métricas — glass ── */
 .metric-card {
-    background: #FFFFFF;
-    border: 1px solid #E9ECF3;
-    border-radius: 14px;
-    padding: 22px 18px;
+    background: rgba(255,255,255,0.70);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255,255,255,0.80);
+    border-radius: 20px;
+    padding: 24px 18px;
     text-align: center;
-    transition: all 0.25s ease;
+    transition: all 0.30s cubic-bezier(0.34,1.56,0.64,1);
     position: relative;
     overflow: hidden;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 24px rgba(99,102,241,0.08), 0 1px 2px rgba(0,0,0,0.04);
 }
 .metric-card::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
-    height: 4px;
+    height: 3px;
     background: linear-gradient(90deg, #2563EB, #7C3AED);
-    border-radius: 14px 14px 0 0;
+    border-radius: 20px 20px 0 0;
+}
+.metric-card::after {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 100px; height: 100px;
+    background: radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 70%);
+    pointer-events: none;
 }
 .metric-card:hover {
-    border-color: #2563EB;
-    transform: translateY(-3px);
-    box-shadow: 0 10px 30px rgba(37,99,235,0.12);
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 16px 48px rgba(37,99,235,0.15), 0 4px 16px rgba(0,0,0,0.06);
+    border-color: rgba(37,99,235,0.3);
 }
 .metric-valor {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 2.4rem;
-    font-weight: 700;
-    color: #2563EB;
+    font-weight: 800;
+    background: linear-gradient(135deg, #2563EB, #7C3AED);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     line-height: 1;
 }
 .metric-label {
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     color: #9CA3AF;
     text-transform: uppercase;
     letter-spacing: 1.5px;
     margin-top: 8px;
-}
-.metric-desc {
-    font-size: 0.68rem;
-    color: #D1D5DB;
-    margin-top: 5px;
+    font-weight: 600;
 }
 
-/* Badge nivel */
-.badge-alta  {
-    background: #ECFDF5;
+/* ── Badges ── */
+.badge-alta {
+    background: linear-gradient(135deg, rgba(16,185,129,0.15), rgba(5,150,105,0.1));
     color: #065F46;
-    border: 1.5px solid #34D399;
-    padding: 6px 20px;
+    border: 1px solid rgba(52,211,153,0.5);
+    padding: 7px 22px;
     border-radius: 999px;
-    font-size: .82rem;
+    font-size: .80rem;
     font-weight: 700;
     letter-spacing: 1.5px;
     display: inline-block;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 2px 8px rgba(16,185,129,0.2);
 }
 .badge-media {
-    background: #FFFBEB;
+    background: linear-gradient(135deg, rgba(251,191,36,0.15), rgba(217,119,6,0.1));
     color: #92400E;
-    border: 1.5px solid #FBBF24;
-    padding: 6px 20px;
+    border: 1px solid rgba(251,191,36,0.5);
+    padding: 7px 22px;
     border-radius: 999px;
-    font-size: .82rem;
+    font-size: .80rem;
     font-weight: 700;
     letter-spacing: 1.5px;
     display: inline-block;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 2px 8px rgba(251,191,36,0.2);
 }
-.badge-baja  {
-    background: #EFF6FF;
+.badge-baja {
+    background: linear-gradient(135deg, rgba(96,165,250,0.15), rgba(37,99,235,0.1));
     color: #1E40AF;
-    border: 1.5px solid #60A5FA;
-    padding: 6px 20px;
+    border: 1px solid rgba(96,165,250,0.5);
+    padding: 7px 22px;
     border-radius: 999px;
-    font-size: .82rem;
+    font-size: .80rem;
     font-weight: 700;
     letter-spacing: 1.5px;
     display: inline-block;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 2px 8px rgba(37,99,235,0.2);
 }
 
-/* Resultado principal */
+/* ── Resultado box — glass premium ── */
 .resultado-box {
-    background: #FFFFFF;
-    border: 1.5px solid #E4E8F0;
-    border-radius: 20px;
-    padding: 36px 28px;
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(28px) saturate(200%);
+    -webkit-backdrop-filter: blur(28px) saturate(200%);
+    border: 1px solid rgba(255,255,255,0.85);
+    border-radius: 28px;
+    padding: 40px 32px;
     text-align: center;
-    box-shadow: 0 8px 40px rgba(37,99,235,0.08);
+    box-shadow: 0 8px 48px rgba(37,99,235,0.10), 0 2px 8px rgba(0,0,0,0.04);
     position: relative;
     overflow: hidden;
+    transition: all 0.3s ease;
 }
 .resultado-box::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
-    height: 5px;
+    height: 4px;
     background: linear-gradient(90deg, #2563EB, #7C3AED, #059669);
+    border-radius: 28px 28px 0 0;
+}
+.resultado-box::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; right: -60px;
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, rgba(124,58,237,0.07) 0%, transparent 70%);
+    pointer-events: none;
 }
 .resultado-numero {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 5.5rem;
-    font-weight: 700;
-    color: #2563EB;
+    font-weight: 800;
+    background: linear-gradient(135deg, #2563EB 30%, #7C3AED);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     line-height: 1;
+    letter-spacing: -3px;
 }
 .resultado-label {
-    font-size: 0.78rem;
+    font-size: 0.72rem;
     color: #9CA3AF;
     text-transform: uppercase;
     letter-spacing: 3px;
     margin-top: 8px;
-}
-
-/* Info box */
-.info-box {
-    background: #F0F5FF;
-    border-left: 3.5px solid #2563EB;
-    border-radius: 0 10px 10px 0;
-    padding: 11px 16px;
-    margin: 8px 0;
-    font-size: 0.88rem;
-    color: #374151;
-}
-.info-box b { color: #111827; }
-
-/* Sección header */
-.section-header {
-    font-size: 0.7rem;
-    color: #2563EB;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    margin-bottom: 14px;
-    padding-bottom: 8px;
-    border-bottom: 1.5px solid #E4E8F0;
     font-weight: 600;
 }
 
-/* Botón predecir (sidebar) */
+/* ── Info boxes — glass pill ── */
+.info-box {
+    background: rgba(239,246,255,0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(191,219,254,0.6);
+    border-radius: 14px;
+    padding: 12px 18px;
+    margin: 7px 0;
+    font-size: 0.87rem;
+    color: #374151;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 4px rgba(37,99,235,0.05);
+}
+.info-box:hover {
+    background: rgba(219,234,254,0.7);
+    border-color: rgba(147,197,253,0.8);
+    transform: translateX(3px);
+}
+.info-box b { color: #111827; font-weight: 700; }
+
+/* ── Section header ── */
+.section-header {
+    font-size: 0.68rem;
+    color: #6366F1;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(99,102,241,0.15);
+    font-weight: 700;
+}
+
+/* ── Botón predecir ── */
 .stButton > button {
-    background: linear-gradient(135deg, #1D4ED8, #7C3AED) !important;
+    background: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%) !important;
     color: white !important;
     border: none !important;
-    border-radius: 12px !important;
+    border-radius: 16px !important;
     padding: 16px 40px !important;
-    font-size: 0.9rem !important;
+    font-size: 0.85rem !important;
     font-weight: 700 !important;
     letter-spacing: 1.5px !important;
     width: 100% !important;
-    transition: all 0.25s ease !important;
+    transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1) !important;
     text-transform: uppercase !important;
-    box-shadow: 0 4px 20px rgba(37,99,235,0.3) !important;
+    box-shadow: 0 4px 20px rgba(37,99,235,0.35), 0 1px 4px rgba(0,0,0,0.1) !important;
 }
 .stButton > button:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 8px 32px rgba(37,99,235,0.45) !important;
+    transform: translateY(-3px) scale(1.01) !important;
+    box-shadow: 0 12px 40px rgba(37,99,235,0.45), 0 4px 12px rgba(124,58,237,0.2) !important;
+}
+.stButton > button:active {
+    transform: translateY(0px) scale(0.99) !important;
 }
 
-/* Botón descarga PNG */
+/* ── Botón descarga ── */
 .stDownloadButton > button {
-    background: #FFFFFF !important;
+    background: rgba(255,255,255,0.8) !important;
     color: #2563EB !important;
-    border: 1.5px solid #BFDBFE !important;
-    border-radius: 8px !important;
-    padding: 7px 12px !important;
-    font-size: 0.75rem !important;
+    border: 1px solid rgba(191,219,254,0.8) !important;
+    border-radius: 10px !important;
+    padding: 7px 14px !important;
+    font-size: 0.73rem !important;
     font-weight: 600 !important;
     width: 100% !important;
     transition: all 0.2s ease !important;
-    letter-spacing: 0.5px !important;
-    margin-top: 4px !important;
+    backdrop-filter: blur(8px) !important;
+    box-shadow: 0 1px 4px rgba(37,99,235,0.08) !important;
 }
 .stDownloadButton > button:hover {
-    background: #EFF6FF !important;
-    border-color: #2563EB !important;
+    background: rgba(239,246,255,0.95) !important;
+    border-color: rgba(37,99,235,0.4) !important;
     transform: translateY(-1px) !important;
     box-shadow: 0 4px 12px rgba(37,99,235,0.15) !important;
 }
 
-/* Inputs */
-.stSelectbox > div > div, .stTextInput > div > div {
-    background: #F9FAFB !important;
-    border-color: #E4E8F0 !important;
+/* ── Inputs — glass style ── */
+.stSelectbox > div > div {
+    background: rgba(255,255,255,0.75) !important;
+    backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(209,213,219,0.6) !important;
+    border-radius: 12px !important;
     color: #111827 !important;
-    border-radius: 10px !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04) !important;
+    transition: all 0.2s ease !important;
+}
+.stSelectbox > div > div:hover {
+    border-color: rgba(99,102,241,0.4) !important;
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.08) !important;
 }
 .stSlider > div { color: #374151 !important; }
 
-div[data-testid="stMetricValue"] {
-    color: #2563EB !important;
-    font-family: 'Playfair Display', serif !important;
-}
-
-/* Tabs */
+/* ── Tabs — pill style ── */
 .stTabs [data-baseweb="tab-list"] {
-    background: #FFFFFF;
-    border-radius: 12px;
-    padding: 4px;
-    border: 1px solid #E4E8F0;
+    background: rgba(255,255,255,0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 16px;
+    padding: 5px;
+    border: 1px solid rgba(255,255,255,0.8);
     gap: 4px;
+    box-shadow: 0 2px 12px rgba(99,102,241,0.08);
 }
 .stTabs [data-baseweb="tab"] {
     color: #6B7280 !important;
-    font-weight: 500 !important;
-    border-radius: 9px !important;
-    padding: 8px 20px !important;
+    font-weight: 600 !important;
+    border-radius: 12px !important;
+    padding: 9px 22px !important;
+    transition: all 0.2s ease !important;
+    font-size: 0.88rem !important;
 }
 .stTabs [aria-selected="true"] {
-    background: #2563EB !important;
+    background: linear-gradient(135deg, #2563EB, #7C3AED) !important;
     color: white !important;
+    box-shadow: 0 4px 16px rgba(37,99,235,0.3) !important;
 }
 
-/* Sidebar labels bold */
-section[data-testid="stSidebar"] strong {
-    color: #111827 !important;
-    font-weight: 600 !important;
+/* ── Metric values ── */
+div[data-testid="stMetricValue"] {
+    color: #2563EB !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-weight: 800 !important;
+}
+
+/* ── Spinners y misc ── */
+.stSpinner > div { border-top-color: #2563EB !important; }
+
+/* ── Separadores hr del sidebar ── */
+section[data-testid="stSidebar"] hr {
+    border-color: rgba(209,213,219,0.4) !important;
+    margin: 12px 0 !important;
+}
+
+/* ── Scrollbar suave estilo macOS ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(99,102,241,0.25); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(99,102,241,0.45); }
+
+/* ── Plots container — glass card ── */
+[data-testid="stImage"], .stPlotlyChart, canvas {
+    border-radius: 18px !important;
+    overflow: hidden !important;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -432,13 +538,13 @@ C_VIOLETA = '#7C3AED'
 C_VERDE   = '#059669'
 C_AMBAR   = '#D97706'
 C_ROJO    = '#DC2626'
-C_GRIS1   = '#F7F8FC'
-C_GRIS2   = '#E9ECF3'
+C_GRIS1   = '#F8FAFF'
+C_GRIS2   = '#E8EDFB'
 C_GRIS3   = '#9CA3AF'
 C_TEXTO   = '#1F2937'
 C_SUBTXT  = '#6B7280'
-FONDO_FIG = '#FFFFFF'
-FONDO_AX  = '#FAFBFE'
+FONDO_FIG = '#FAFBFF'
+FONDO_AX  = '#F4F6FD'
 
 def estilo_ax(ax, titulo, xlabel='', ylabel=''):
     ax.set_facecolor(FONDO_AX)
@@ -700,15 +806,24 @@ with tab1:
                 st.exception(e)
     else:
         st.markdown("""
-        <div style="text-align:center; padding: 80px 40px; background:#FFFFFF; border-radius:20px;
-             border:1.5px dashed #E4E8F0; margin-top:20px;">
-            <div style="font-size:4rem;">🎓</div>
-            <div style="font-family:'Playfair Display',serif; font-size:1.4rem; color:#2563EB; margin-top:16px; font-weight:700;">
+        <div style="text-align:center; padding: 80px 40px;
+             background: rgba(255,255,255,0.6);
+             backdrop-filter: blur(24px) saturate(180%);
+             -webkit-backdrop-filter: blur(24px) saturate(180%);
+             border-radius: 28px;
+             border: 1px solid rgba(255,255,255,0.8);
+             box-shadow: 0 8px 40px rgba(99,102,241,0.08);
+             margin-top: 20px;">
+            <div style="font-size:4rem; filter: drop-shadow(0 4px 12px rgba(37,99,235,0.2));">🎓</div>
+            <div style="font-family:'Plus Jakarta Sans',sans-serif; font-size:1.4rem;
+                 background: linear-gradient(135deg,#2563EB,#7C3AED);
+                 -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+                 margin-top:18px; font-weight:800; letter-spacing:-0.5px;">
                 Configura los parámetros en el panel izquierdo
             </div>
-            <div style="font-size:0.9rem; margin-top:10px; color:#9CA3AF;">
+            <div style="font-size:0.88rem; margin-top:10px; color:#9CA3AF; font-weight:500;">
                 Selecciona las características del perfil universitario y presiona<br>
-                <b style="color:#1F2937;">PREDECIR DEMANDA</b> para obtener el resultado del modelo stacking.
+                <b style="color:#374151; font-weight:700;">PREDECIR DEMANDA</b> para obtener el resultado del modelo stacking.
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -854,8 +969,12 @@ with tab3:
 
         # Construir HTML como string Python puro (evita que Streamlit escape las etiquetas)
         html_informe = (
-            '<div style="background:#FFFFFF;border:1.5px solid #E4E8F0;border-radius:20px;'
-            'padding:36px 40px;line-height:2;color:#374151;box-shadow:0 4px 24px rgba(0,0,0,0.06);">'
+            '<div style="background:rgba(255,255,255,0.72);'
+            'backdrop-filter:blur(28px) saturate(180%);'
+            '-webkit-backdrop-filter:blur(28px) saturate(180%);'
+            'border:1px solid rgba(255,255,255,0.85);border-radius:28px;'
+            'padding:36px 40px;line-height:2;color:#374151;'
+            'box-shadow:0 8px 48px rgba(99,102,241,0.09),0 2px 8px rgba(0,0,0,0.04);">'
 
             # Encabezado
             '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;">'
@@ -925,11 +1044,20 @@ with tab3:
         st.markdown(html_informe, unsafe_allow_html=True)
     else:
         st.markdown("""
-        <div style="text-align:center; padding:50px 40px; background:#FFFFFF;
-             border:1.5px dashed #E4E8F0; border-radius:16px; color:#9CA3AF;">
+        <div style="text-align:center; padding:50px 40px;
+             background: rgba(255,255,255,0.65);
+             backdrop-filter: blur(20px) saturate(180%);
+             -webkit-backdrop-filter: blur(20px) saturate(180%);
+             border: 1px solid rgba(255,255,255,0.8);
+             border-radius: 24px;
+             box-shadow: 0 4px 24px rgba(99,102,241,0.07);
+             color:#9CA3AF;">
             <div style="font-size:3rem;">📋</div>
-            <div style="font-size:1rem; margin-top:12px; color:#6B7280;">
-                Ejecuta una predicción primero desde la pestaña <b style="color:#2563EB;">📊 Predicción</b>
+            <div style="font-size:1rem; margin-top:14px; color:#6B7280; font-weight:500;">
+                Ejecuta una predicción primero desde la pestaña
+                <b style="background:linear-gradient(135deg,#2563EB,#7C3AED);
+                -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+                font-weight:700;">📊 Predicción</b>
             </div>
         </div>
         """, unsafe_allow_html=True)
