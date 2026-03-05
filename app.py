@@ -32,7 +32,6 @@ html, body, [class*="css"] {
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-/* ── Fondo general con mesh gradient suave estilo Apple ── */
 .stApp {
     background: linear-gradient(135deg, #EEF2FF 0%, #F0F9FF 30%, #F5F3FF 60%, #ECFDF5 100%);
     background-attachment: fixed;
@@ -40,7 +39,6 @@ html, body, [class*="css"] {
     min-height: 100vh;
 }
 
-/* Pseudo-orbes decorativos en el fondo */
 .stApp::before {
     content: '';
     position: fixed;
@@ -58,7 +56,6 @@ html, body, [class*="css"] {
     pointer-events: none; z-index: 0;
 }
 
-/* ── Sidebar — glass panel ── */
 section[data-testid="stSidebar"] {
     background: rgba(255,255,255,0.72) !important;
     backdrop-filter: blur(24px) saturate(180%) !important;
@@ -77,7 +74,6 @@ section[data-testid="stSidebar"] strong {
     font-weight: 700 !important;
 }
 
-/* ── Título principal ── */
 .titulo-principal {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 2.6rem;
@@ -101,7 +97,6 @@ section[data-testid="stSidebar"] strong {
     text-transform: uppercase;
 }
 
-/* ── Línea decorativa ── */
 .divider-line {
     height: 2px;
     background: linear-gradient(90deg, rgba(37,99,235,0.8) 0%, rgba(124,58,237,0.6) 50%, rgba(5,150,105,0.4) 100%);
@@ -109,7 +104,6 @@ section[data-testid="stSidebar"] strong {
     margin: 14px 0 26px 0;
 }
 
-/* ── Cards métricas — glass ── */
 .metric-card {
     background: rgba(255,255,255,0.70);
     backdrop-filter: blur(20px) saturate(180%);
@@ -163,7 +157,6 @@ section[data-testid="stSidebar"] strong {
     font-weight: 600;
 }
 
-/* ── Badges ── */
 .badge-alta {
     background: linear-gradient(135deg, rgba(16,185,129,0.15), rgba(5,150,105,0.1));
     color: #065F46;
@@ -204,7 +197,6 @@ section[data-testid="stSidebar"] strong {
     box-shadow: 0 2px 8px rgba(37,99,235,0.2);
 }
 
-/* ── Resultado box — glass premium ── */
 .resultado-box {
     background: rgba(255,255,255,0.75);
     backdrop-filter: blur(28px) saturate(200%);
@@ -254,7 +246,6 @@ section[data-testid="stSidebar"] strong {
     font-weight: 600;
 }
 
-/* ── Info boxes — glass pill ── */
 .info-box {
     background: rgba(239,246,255,0.7);
     backdrop-filter: blur(12px);
@@ -275,7 +266,6 @@ section[data-testid="stSidebar"] strong {
 }
 .info-box b { color: #111827; font-weight: 700; }
 
-/* ── Section header ── */
 .section-header {
     font-size: 0.68rem;
     color: #6366F1;
@@ -287,7 +277,6 @@ section[data-testid="stSidebar"] strong {
     font-weight: 700;
 }
 
-/* ── Botón predecir ── */
 .stButton > button {
     background: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%) !important;
     color: white !important;
@@ -310,7 +299,6 @@ section[data-testid="stSidebar"] strong {
     transform: translateY(0px) scale(0.99) !important;
 }
 
-/* ── Botón descarga ── */
 .stDownloadButton > button {
     background: rgba(255,255,255,0.8) !important;
     color: #2563EB !important;
@@ -331,7 +319,6 @@ section[data-testid="stSidebar"] strong {
     box-shadow: 0 4px 12px rgba(37,99,235,0.15) !important;
 }
 
-/* ── Inputs — glass style ── */
 .stSelectbox > div > div {
     background: rgba(255,255,255,0.75) !important;
     backdrop-filter: blur(12px) !important;
@@ -347,7 +334,6 @@ section[data-testid="stSidebar"] strong {
 }
 .stSlider > div { color: #374151 !important; }
 
-/* ── Tabs — pill style ── */
 .stTabs [data-baseweb="tab-list"] {
     background: rgba(255,255,255,0.65);
     backdrop-filter: blur(16px);
@@ -372,29 +358,24 @@ section[data-testid="stSidebar"] strong {
     box-shadow: 0 4px 16px rgba(37,99,235,0.3) !important;
 }
 
-/* ── Metric values ── */
 div[data-testid="stMetricValue"] {
     color: #2563EB !important;
     font-family: 'Plus Jakarta Sans', sans-serif !important;
     font-weight: 800 !important;
 }
 
-/* ── Spinners y misc ── */
 .stSpinner > div { border-top-color: #2563EB !important; }
 
-/* ── Separadores hr del sidebar ── */
 section[data-testid="stSidebar"] hr {
     border-color: rgba(209,213,219,0.4) !important;
     margin: 12px 0 !important;
 }
 
-/* ── Scrollbar suave estilo macOS ── */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(99,102,241,0.25); border-radius: 10px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(99,102,241,0.45); }
 
-/* ── Plots container — glass card ── */
 [data-testid="stImage"], .stPlotlyChart, canvas {
     border-radius: 18px !important;
     overflow: hidden !important;
@@ -595,7 +576,6 @@ with tab1:
                     color_nivel = C_AZUL
                     color_bg_nivel = '#EFF6FF'
 
-                # Resultado principal
                 col_res, col_info = st.columns([1, 1])
 
                 with col_res:
@@ -623,8 +603,6 @@ with tab1:
                     """, unsafe_allow_html=True)
 
                 st.markdown("<br>", unsafe_allow_html=True)
-
-                # ---- GRÁFICOS INDIVIDUALES — bytes guardados en session_state ----
                 st.markdown('<div class="section-header">📊 Análisis Visual del Resultado</div>', unsafe_allow_html=True)
 
                 import io, zipfile, base64
@@ -636,29 +614,40 @@ with tab1:
                     buf.seek(0)
                     return buf.read()
 
-                figs_bytes = {}   # nombre_archivo -> bytes PNG
+                figs_bytes = {}
 
                 # ─── FILA 1 ───
                 col_g1, col_g2, col_g3 = st.columns(3)
 
+                # ══════════════════════════════════════════════════════════
+                # GRÁFICO 1 — título y subtítulo bien separados (FIX)
+                # Cambios vs versión anterior:
+                #   figsize alto: 3.8 → 4.4  (más espacio vertical total)
+                #   pad título:   10  → 32   (empuja título hacia arriba)
+                #   y subtítulo: -0.28→-0.38 (baja el subtítulo, no toca el título)
+                # ══════════════════════════════════════════════════════════
                 with col_g1:
-                    f1, a1 = plt.subplots(figsize=(6, 3.8), facecolor=FONDO_FIG)
+                    f1, a1 = plt.subplots(figsize=(6, 4.4), facecolor=FONDO_FIG)
                     a1.set_facecolor(FONDO_AX)
-                    for sp in a1.spines.values(): sp.set_color(C_GRIS2)
+                    for sp in a1.spines.values():
+                        sp.set_color(C_GRIS2)
                     a1.barh([""], [maximo_ref], color=C_GRIS2, height=0.55, edgecolor='none')
                     a1.barh([""], [resultado], color=color_nivel, height=0.55, edgecolor='none', alpha=0.9)
                     a1.set_xlim(0, maximo_ref * 1.28)
-                    a1.set_title("Demanda vs máximo histórico", color=C_TEXTO, fontsize=10, fontweight='600', pad=10, loc='left')
+                    a1.set_title("Demanda vs máximo histórico", color=C_TEXTO,
+                                 fontsize=10, fontweight='600', pad=32, loc='left')
                     a1.set_xlabel("Estudiantes", color=C_SUBTXT, fontsize=8)
                     a1.tick_params(colors=C_SUBTXT, labelsize=8)
                     a1.grid(axis='x', color=C_GRIS2, linewidth=0.6, alpha=0.8)
                     a1.set_axisbelow(True)
-                    a1.text(resultado + maximo_ref*0.02, 0, f'{resultado} est.\n({porcentaje_max}%)',
+                    a1.text(resultado + maximo_ref * 0.02, 0,
+                            f'{resultado} est.\n({porcentaje_max}%)',
                             va='center', color=color_nivel, fontweight='bold', fontsize=9)
-                    a1.text(maximo_ref*0.98, 0, f'Máx: {maximo_ref}', va='center', ha='right', color=C_GRIS3, fontsize=7.5)
-                    # Subtítulo debajo del eje X (sin solapar el título)
-                    a1.text(0.02, -0.28, f'{porcentaje_max}% de capacidad máxima',
-                            transform=a1.transAxes, color=color_nivel, fontsize=8, fontweight='600')
+                    a1.text(maximo_ref * 0.98, 0, f'Máx: {maximo_ref}',
+                            va='center', ha='right', color=C_GRIS3, fontsize=7.5)
+                    a1.text(0.02, -0.38, f'{porcentaje_max}% de capacidad máxima',
+                            transform=a1.transAxes, color=color_nivel,
+                            fontsize=8, fontweight='600')
                     f1.tight_layout()
                     st.pyplot(f1)
                     figs_bytes[f'1_demanda_gauge_{anio}.png'] = fig_bytes(f1)
@@ -667,7 +656,8 @@ with tab1:
                 with col_g2:
                     f2, a2 = plt.subplots(figsize=(6, 3.8), facecolor=FONDO_FIG)
                     pl = ["I","II","ANUAL"]
-                    var = [resultado*0.85, resultado*1.0, resultado*1.15] if periodo=="ANUAL" else [resultado*1.0, resultado*0.9, resultado*1.05]
+                    var = [resultado*0.85, resultado*1.0, resultado*1.15] if periodo=="ANUAL" else \
+                          [resultado*1.0, resultado*0.9, resultado*1.05]
                     var = [int(v) for v in var]
                     cp = [color_nivel if p==periodo else C_GRIS2 for p in pl]
                     b2 = a2.bar(pl, var, color=cp, edgecolor='white', width=0.5, linewidth=1.2)
@@ -677,7 +667,8 @@ with tab1:
                     for bar, val in zip(b2, var):
                         pct = round((val/maximo_ref)*100, 1)
                         a2.text(bar.get_x()+bar.get_width()/2, bar.get_height()+mv*0.02,
-                                f'{val}\n({pct}%)', ha='center', va='bottom', color=C_TEXTO, fontsize=7.5, fontweight='600', linespacing=1.4)
+                                f'{val}\n({pct}%)', ha='center', va='bottom',
+                                color=C_TEXTO, fontsize=7.5, fontweight='600', linespacing=1.4)
                     f2.tight_layout()
                     st.pyplot(f2)
                     figs_bytes[f'2_proyeccion_periodo_{anio}.png'] = fig_bytes(f2)
@@ -686,22 +677,29 @@ with tab1:
                 with col_g3:
                     f3, a3 = plt.subplots(figsize=(6, 3.8), facecolor=FONDO_FIG)
                     a3.set_facecolor(FONDO_AX)
-                    for sp in a3.spines.values(): sp.set_color(C_GRIS2)
+                    for sp in a3.spines.values():
+                        sp.set_color(C_GRIS2)
                     ah = list(range(anio-4, anio+3))
                     vh = [int(resultado*f) for f in [0.6,0.7,0.8,0.9,1.0,1.08,1.15]]
                     a3.fill_between(ah[:5], vh[:5], alpha=0.12, color=C_AZUL)
                     a3.fill_between(ah[4:], vh[4:], alpha=0.08, color=C_VIOLETA)
-                    a3.plot(ah[:5], vh[:5], 'o-', color=C_AZUL, linewidth=2.2, markersize=6, label='Histórico', zorder=3)
-                    a3.plot(ah[4:], vh[4:], 'o--', color=C_VIOLETA, linewidth=2.2, markersize=6, label='Proyectado', zorder=3)
+                    a3.plot(ah[:5], vh[:5], 'o-', color=C_AZUL, linewidth=2.2,
+                            markersize=6, label='Histórico', zorder=3)
+                    a3.plot(ah[4:], vh[4:], 'o--', color=C_VIOLETA, linewidth=2.2,
+                            markersize=6, label='Proyectado', zorder=3)
                     a3.axvline(x=anio, color=color_nivel, linestyle=':', alpha=0.7, linewidth=1.5)
                     crec = round(((vh[5]-vh[4])/vh[4])*100, 1)
                     a3.annotate(f'+{crec}%', xy=(ah[5], vh[5]),
-                                xytext=(ah[5]+0.2, vh[5]+max(vh)*0.05), color=C_VIOLETA, fontsize=8, fontweight='700')
-                    a3.set_title("Tendencia temporal", color=C_TEXTO, fontsize=10, fontweight='600', pad=10, loc='left')
+                                xytext=(ah[5]+0.2, vh[5]+max(vh)*0.05),
+                                color=C_VIOLETA, fontsize=8, fontweight='700')
+                    a3.set_title("Tendencia temporal", color=C_TEXTO,
+                                 fontsize=10, fontweight='600', pad=10, loc='left')
                     a3.set_ylabel("Estudiantes", color=C_SUBTXT, fontsize=8)
                     a3.tick_params(colors=C_SUBTXT, labelsize=7.5, rotation=25)
-                    a3.grid(color=C_GRIS2, linewidth=0.6, alpha=0.8); a3.set_axisbelow(True)
-                    a3.legend(fontsize=7.5, facecolor=FONDO_FIG, labelcolor=C_SUBTXT, edgecolor=C_GRIS2, framealpha=1)
+                    a3.grid(color=C_GRIS2, linewidth=0.6, alpha=0.8)
+                    a3.set_axisbelow(True)
+                    a3.legend(fontsize=7.5, facecolor=FONDO_FIG, labelcolor=C_SUBTXT,
+                              edgecolor=C_GRIS2, framealpha=1)
                     f3.tight_layout()
                     st.pyplot(f3)
                     figs_bytes[f'3_tendencia_temporal_{anio}.png'] = fig_bytes(f3)
@@ -715,7 +713,8 @@ with tab1:
                 with col_g4:
                     f4, a4 = plt.subplots(figsize=(6, 3.8), facecolor=FONDO_FIG)
                     gs_l = ["Público","Privado"]
-                    vg = [int(resultado*1.2), int(resultado*0.9)] if nombre_entidad=="Público" else [int(resultado*0.8), int(resultado*1.0)]
+                    vg = [int(resultado*1.2), int(resultado*0.9)] if nombre_entidad=="Público" else \
+                         [int(resultado*0.8), int(resultado*1.0)]
                     cg = [C_AZUL if g==nombre_entidad else C_GRIS2 for g in gs_l]
                     b4 = a4.bar(gs_l, vg, color=cg, edgecolor='white', width=0.45, linewidth=1.2)
                     estilo_ax(a4, "Por tipo de gestión", ylabel="Estudiantes")
@@ -725,7 +724,8 @@ with tab1:
                     for bar, val in zip(b4, vg):
                         pct = round((val/tg)*100, 1)
                         a4.text(bar.get_x()+bar.get_width()/2, bar.get_height()+mg*0.02,
-                                f'{val}\n({pct}%)', ha='center', va='bottom', color=C_TEXTO, fontsize=8, fontweight='600', linespacing=1.4)
+                                f'{val}\n({pct}%)', ha='center', va='bottom',
+                                color=C_TEXTO, fontsize=8, fontweight='600', linespacing=1.4)
                     f4.tight_layout()
                     st.pyplot(f4)
                     figs_bytes[f'4_gestion_{anio}.png'] = fig_bytes(f4)
@@ -737,12 +737,18 @@ with tab1:
                     niv = ["Carrera Prof.","Maestría","Doctorado","2da Esp."]
                     prop = [0.72, 0.15, 0.08, 0.05]
                     cpie = [C_AZUL, C_VIOLETA, C_VERDE, C_AMBAR]
-                    w, t, at = a5.pie(prop, labels=niv, colors=cpie, autopct='%1.1f%%', startangle=90,
-                                     pctdistance=0.78, textprops={'color':C_SUBTXT,'fontsize':7.5},
+                    w, t, at = a5.pie(prop, labels=niv, colors=cpie, autopct='%1.1f%%',
+                                     startangle=90, pctdistance=0.78,
+                                     textprops={'color':C_SUBTXT,'fontsize':7.5},
                                      wedgeprops={'edgecolor':FONDO_FIG,'linewidth':2.5,'width':0.62})
-                    for x in at: x.set_fontsize(7.5); x.set_color('#FFFFFF'); x.set_fontweight('bold')
-                    a5.text(0, 0, f'{resultado}\nest.', ha='center', va='center', color=C_TEXTO, fontsize=9, fontweight='700', linespacing=1.5)
-                    a5.set_title("Distribución por nivel académico", color=C_TEXTO, fontsize=10, fontweight='600', pad=10, loc='left')
+                    for x in at:
+                        x.set_fontsize(7.5)
+                        x.set_color('#FFFFFF')
+                        x.set_fontweight('bold')
+                    a5.text(0, 0, f'{resultado}\nest.', ha='center', va='center',
+                            color=C_TEXTO, fontsize=9, fontweight='700', linespacing=1.5)
+                    a5.set_title("Distribución por nivel académico", color=C_TEXTO,
+                                 fontsize=10, fontweight='600', pad=10, loc='left')
                     f5.tight_layout()
                     st.pyplot(f5)
                     figs_bytes[f'5_nivel_academico_{anio}.png'] = fig_bytes(f5)
@@ -751,7 +757,8 @@ with tab1:
                 with col_g6:
                     f6, a6 = plt.subplots(figsize=(6, 3.8), facecolor=FONDO_FIG)
                     mods = ["RF","XGB","LGBM","SVR","Stacking"]
-                    pm = [int(resultado*0.91), int(resultado*0.94), int(resultado*0.97), int(resultado*0.88), resultado]
+                    pm = [int(resultado*0.91), int(resultado*0.94),
+                          int(resultado*0.97), int(resultado*0.88), resultado]
                     cm = [C_GRIS2, C_GRIS2, C_GRIS2, C_GRIS2, color_nivel]
                     b6 = a6.bar(mods, pm, color=cm, edgecolor='white', width=0.5, linewidth=1.2)
                     estilo_ax(a6, "Predicción por modelo base", ylabel="Estudiantes")
@@ -761,14 +768,16 @@ with tab1:
                         dp = round(((val-resultado)/resultado)*100, 1)
                         lbl = f'{val}\n({dp:+.1f}%)' if val!=resultado else f'{val}\n(ref)'
                         a6.text(bar.get_x()+bar.get_width()/2, bar.get_height()+mm*0.02,
-                                lbl, ha='center', va='bottom', color=C_TEXTO, fontsize=7, fontweight='600', linespacing=1.4)
-                    a6.axhline(y=resultado, color=color_nivel, linestyle='--', linewidth=1.2, alpha=0.5, zorder=0)
+                                lbl, ha='center', va='bottom',
+                                color=C_TEXTO, fontsize=7, fontweight='600', linespacing=1.4)
+                    a6.axhline(y=resultado, color=color_nivel, linestyle='--',
+                               linewidth=1.2, alpha=0.5, zorder=0)
                     f6.tight_layout()
                     st.pyplot(f6)
                     figs_bytes[f'6_modelos_base_{anio}.png'] = fig_bytes(f6)
                     plt.close(f6)
 
-                # ── BOTÓN ÚNICO: descarga ZIP con todas las gráficas (sin recargar) ──
+                # ── Descarga ZIP ──
                 zip_buf = io.BytesIO()
                 with zipfile.ZipFile(zip_buf, 'w', zipfile.ZIP_DEFLATED) as zf:
                     for fname, data in figs_bytes.items():
@@ -788,7 +797,6 @@ with tab1:
                 )
                 st.markdown("<div style='margin-top:12px;'>" + href + "</div>", unsafe_allow_html=True)
 
-                # Guardar en session_state (incluyendo bytes de figuras para Tab 2)
                 st.session_state['resultado'] = resultado
                 st.session_state['nivel_str'] = nivel_str
                 st.session_state['color_nivel'] = color_nivel
@@ -840,12 +848,12 @@ with tab2:
 
     fig2, axes = plt.subplots(1, 2, figsize=(15, 6), facecolor=FONDO_FIG)
 
-    # ── Barras horizontales por departamento con % ──
     ax = axes[0]
     ax.set_facecolor(FONDO_AX)
     colores_bar = [C_AZUL if d == departamento_local else '#CBD5E1' for d in dptos]
     bars = ax.barh(dptos, demandas_ref, color=colores_bar, edgecolor='white', height=0.6, linewidth=1)
-    ax.set_title("Demanda promedio por departamento", color=C_TEXTO, fontsize=11, fontweight='600', pad=12, loc='left')
+    ax.set_title("Demanda promedio por departamento", color=C_TEXTO,
+                 fontsize=11, fontweight='600', pad=12, loc='left')
     ax.set_xlabel("Estudiantes (promedio histórico)", color=C_SUBTXT, fontsize=9)
     ax.tick_params(colors=C_SUBTXT, labelsize=9)
     for spine in ax.spines.values():
@@ -853,7 +861,6 @@ with tab2:
         spine.set_linewidth(0.8)
     ax.grid(axis='x', color=C_GRIS2, linewidth=0.6, alpha=0.8)
     ax.set_axisbelow(True)
-    # Etiquetas con valor y %
     for bar, val in zip(bars, demandas_ref):
         pct = round((val / max(demandas_ref)) * 100, 0)
         ax.text(val + 0.8, bar.get_y() + bar.get_height()/2,
@@ -861,12 +868,11 @@ with tab2:
     patch = mpatches.Patch(color=C_AZUL, label=f'Seleccionado: {departamento_local}')
     ax.legend(handles=[patch], fontsize=8.5, facecolor=FONDO_FIG, labelcolor=C_SUBTXT, edgecolor=C_GRIS2)
 
-    # ── Barras por área con % ──
     ax2 = axes[1]
     ax2.set_facecolor(FONDO_AX)
-    areas_top = ["Ingeniería", "Admin.", "Educación", "Salud", "Cs. Sociales", "TIC", "Cs. Naturales", "Agro", "Arte"]
+    areas_top = ["Ingeniería","Admin.","Educación","Salud","Cs. Sociales","TIC","Cs. Naturales","Agro","Arte"]
     vals_area  = [78, 70, 65, 61, 52, 55, 40, 35, 28]
-    area_sel_idx = 0  # default Ingeniería
+    area_sel_idx = 0
     if "Educación" in area_conocimiento: area_sel_idx = 2
     elif "Salud" in area_conocimiento: area_sel_idx = 3
     elif "Administración" in area_conocimiento: area_sel_idx = 1
@@ -874,7 +880,8 @@ with tab2:
     colores_area = ['#CBD5E1'] * len(areas_top)
     colores_area[area_sel_idx] = C_VIOLETA
     bars_a = ax2.bar(areas_top, vals_area, color=colores_area, edgecolor='white', width=0.6, linewidth=1)
-    ax2.set_title("Demanda por área de conocimiento", color=C_TEXTO, fontsize=11, fontweight='600', pad=12, loc='left')
+    ax2.set_title("Demanda por área de conocimiento", color=C_TEXTO,
+                  fontsize=11, fontweight='600', pad=12, loc='left')
     ax2.set_ylabel("Estudiantes (promedio)", color=C_SUBTXT, fontsize=9)
     ax2.tick_params(colors=C_SUBTXT, labelsize=7.5, axis='x', rotation=32)
     ax2.tick_params(colors=C_SUBTXT, labelsize=9, axis='y')
@@ -893,7 +900,6 @@ with tab2:
     plt.tight_layout(pad=2.0)
     st.pyplot(fig2)
 
-    # Guardar bytes y ofrecer descarga ZIP sin recargar
     import io, zipfile, base64
     buf_comp = io.BytesIO()
     fig2.savefig(buf_comp, format='png', dpi=180, bbox_inches='tight', facecolor=FONDO_FIG)
@@ -917,7 +923,6 @@ with tab2:
     st.markdown("<div style='margin-top:10px;'>" + href2 + "</div>", unsafe_allow_html=True)
     plt.close()
 
-    # Métricas resumen
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown('<div class="section-header">📊 Métricas del modelo (datos de entrenamiento)</div>', unsafe_allow_html=True)
     c1, c2, c3, c4 = st.columns(4)
@@ -953,7 +958,6 @@ with tab3:
         color_badge = '#065F46' if n=='ALTA' else '#92400E' if n=='MEDIA' else '#1E40AF'
         bg_badge    = '#ECFDF5' if n=='ALTA' else '#FFFBEB' if n=='MEDIA' else '#EFF6FF'
 
-        # Pre-calcular textos condicionales FUERA del f-string para evitar escape de HTML
         if n == 'ALTA':
             texto_nivel = 'superando el umbral de 50 estudiantes por grupo, lo que indica alta absorción.'
             recos_html = ('<li>Fortalecer la oferta académica en esta área — existe demanda sostenida y creciente.</li>'
@@ -967,7 +971,6 @@ with tab3:
             recos_html = ('<li>Revisar la pertinencia de la oferta frente al mercado laboral regional.</li>'
                           '<li>Considerar fusión con programas afines o rediseño curricular.</li>')
 
-        # Construir HTML como string Python puro (evita que Streamlit escape las etiquetas)
         html_informe = (
             '<div style="background:rgba(255,255,255,0.72);'
             'backdrop-filter:blur(28px) saturate(180%);'
@@ -975,8 +978,6 @@ with tab3:
             'border:1px solid rgba(255,255,255,0.85);border-radius:28px;'
             'padding:36px 40px;line-height:2;color:#374151;'
             'box-shadow:0 8px 48px rgba(99,102,241,0.09),0 2px 8px rgba(0,0,0,0.04);">'
-
-            # Encabezado
             '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;">'
             '<div>'
             '<h3 style="color:#111827;font-family:serif;font-size:1.3rem;margin:0 0 4px 0;">'
@@ -988,8 +989,6 @@ with tab3:
             'padding:8px 22px;border-radius:999px;font-size:0.85rem;font-weight:700;'
             'letter-spacing:1.5px;white-space:nowrap;">DEMANDA ' + n + '</div>'
             '</div>'
-
-            # Grid parámetros + resultado
             '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;">'
             '<div style="background:#F7F8FC;border-radius:12px;padding:16px 20px;">'
             '<div style="font-size:0.68rem;color:#9CA3AF;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;">Parámetros de entrada</div>'
@@ -1009,8 +1008,6 @@ with tab3:
             '</div>'
             '</div>'
             '</div>'
-
-            # Análisis
             '<div style="border-top:1.5px solid #E4E8F0;padding-top:20px;margin-top:4px;">'
             '<div style="font-size:0.68rem;color:#9CA3AF;text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;">Análisis del resultado</div>'
             '<p style="margin:0 0 12px 0;">El metamodelo de ensamble stacking —conformado por los modelos base '
@@ -1021,8 +1018,6 @@ with tab3:
             '<p style="margin:0;">Este valor corresponde a una demanda clasificada como '
             '<b style="color:' + color_badge + ';">' + n + '</b>, ' + texto_nivel + '</p>'
             '</div>'
-
-            # Recomendaciones
             '<div style="border-top:1.5px solid #E4E8F0;padding-top:20px;margin-top:4px;">'
             '<div style="font-size:0.68rem;color:#9CA3AF;text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;">Recomendaciones estratégicas</div>'
             '<ul style="padding-left:20px;line-height:2;margin:0;">'
@@ -1032,8 +1027,6 @@ with tab3:
             '<li>Cruzar resultados con indicadores de empleabilidad y mercado laboral.</li>'
             '</ul>'
             '</div>'
-
-            # Footer
             '<div style="border-top:1.5px solid #E4E8F0;padding-top:14px;margin-top:8px;'
             'display:flex;justify-content:space-between;align-items:center;">'
             '<div style="font-size:0.72rem;color:#9CA3AF;">Generado por Metamodelo Stacking · Datos: SUNEDU · MINEDU · TUNI.pe</div>'
